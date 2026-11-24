@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}Gestor Documental CDI{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+</head>
+<body>
+  {% if usuario %}
+  <header class="barra">
+    <a class="marca" href="{{ url_for('panel') }}">Gestor Documental CDI</a>
+    <nav>
+      <a href="{{ url_for('panel') }}" class="{{ 'activo' if request.endpoint in ('panel', 'ver_item') }}">Mis documentos</a>
+      <a href="{{ url_for('ninos') }}" class="{{ 'activo' if request.endpoint == 'ninos' }}">Niños</a>
+      {% if usuario.puede_ver_reportes() %}
+      <a href="{{ url_for('ver_reporte') }}" class="{{ 'activo' if request.endpoint == 'ver_reporte' }}">Cumplimiento</a>
+      <a href="{{ url_for('ver_bitacora') }}" class="{{ 'activo' if request.endpoint == 'ver_bitacora' }}">Bitácora</a>
+      {% endif %}
+    </nav>
+    <div class="sesion">{{ usuario.nombres }} · {{ usuario.NOMBRE_CARGO }}<a href="{{ url_for('logout') }}">Salir</a></div>
+  </header>
+  {% endif %}
+  <main>
+    {% with mensajes = get_flashed_messages(with_categories=true) %}
+      {% if mensajes %}
+      <ul class="mensajes">
+        {% for categoria, texto in mensajes %}<li class="{{ categoria }}">{{ texto }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+    {% endwith %}
+    {% block contenido %}{% endblock %}
+  </main>
+</body>
+</html>
