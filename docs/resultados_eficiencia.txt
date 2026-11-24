@@ -1,0 +1,9 @@
+ Niños    Docs |   Ingenuo Consultas  Con red* |  Agrupado Sin índice  Con red*
+------------------------------------------------------------------------------------
+    50    2500 |       0.5       104       105 |       0.3        0.2         2
+   200   10000 |       2.2       404       406 |       1.4        0.9         3
+   500   25000 |       6.9      1004      1011 |       3.0        2.4         5
+  1000   50000 |      12.9      2004      2017 |       6.7        4.6         9
+
+Tiempos en milisegundos (promedio de 5 repeticiones).
+* Estimación: tiempo medido + 1 ms por cada consulta, como pasaría con una base de datos en red.
