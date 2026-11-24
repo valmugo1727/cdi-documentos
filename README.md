@@ -128,16 +128,3 @@ Se trabajó con ramas, como en un equipo profesional:
 - `feature/*` y `docs/*`: una rama por funcionalidad, integradas a `develop` con *merge* sin avance rápido (`--no-ff`) para que quede registro de cada etapa.
 
 Mensajes de commit con el formato *Conventional Commits* (`feat`, `test`, `docs`, `perf`, `style`, `chore`).
-
-## Subir el proyecto a GitHub
-
-1. Crear un repositorio **vacío** en GitHub (sin README ni .gitignore), por ejemplo `cdi-documentos`.
-2. En la terminal de VS Code, dentro de la carpeta del proyecto:
-   ```bash
-   git config user.name "Tu Nombre"
-   git config user.email "tu-correo@ejemplo.com"
-   git remote add origin https://github.com/USUARIO/cdi-documentos.git
-   git push -u origin --all     # sube main, develop y todas las ramas
-   git push origin --tags       # sube la etiqueta v1.0.0
-   ```
-3. En GitHub, en *Insights → Network*, se ve el historial de ramas y merges.
