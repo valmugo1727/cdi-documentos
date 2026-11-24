@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block titulo %}Niños · Gestor Documental CDI{% endblock %}
+{% block contenido %}
+<h1>Niños y niñas registrados</h1>
+<p class="subtitulo">{{ ninos|length }} matriculados en el CDI</p>
+
+<div class="columnas-item">
+  <form class="tarjeta" method="post">
+    <h2 style="margin-top:0">Registrar niño</h2>
+    <div class="campo"><label for="documento">Documento (NUIP / RC)</label><input id="documento" name="documento" required></div>
+    <div class="campo"><label for="nombres">Nombres y apellidos</label><input id="nombres" name="nombres" required></div>
+    <div class="campo"><label for="fecha_nacimiento">Fecha de nacimiento</label>
+      <input id="fecha_nacimiento" name="fecha_nacimiento" type="date" max="{{ hoy.isoformat() }}" required></div>
+    <div class="campo"><label for="acudiente">Acudiente</label><input id="acudiente" name="acudiente" required></div>
+    <div class="campo"><label for="telefono">Teléfono del acudiente</label><input id="telefono" name="telefono"></div>
+    <button type="submit">Registrar</button>
+  </form>
+
+  <div class="tarjeta">
+    {% if ninos %}
+    <table>
+      <thead><tr><th>Nombre</th><th>Documento</th><th>Edad</th><th>Acudiente</th></tr></thead>
+      <tbody>
+      {% for n in ninos %}
+        <tr>
+          <td>{{ n.nombres }}</td>
+          <td>{{ n.documento }}</td>
+          <td>{{ n.edad_en_meses() }} meses</td>
+          <td>{{ n.acudiente }}{% if n.telefono_acudiente %}<div class="ayuda">{{ n.telefono_acudiente }}</div>{% endif %}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="vacio">No hay niños registrados.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

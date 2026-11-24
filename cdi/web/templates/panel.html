@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% macro selector_periodo(destino, periodo, periodos) %}
+<form class="linea" method="get" action="{{ destino }}">
+  <label for="periodo" style="margin:0">Periodo</label>
+  <select id="periodo" name="periodo" onchange="this.form.submit()" style="width:auto">
+    {% for p in periodos %}<option value="{{ p }}" {{ 'selected' if p == periodo }}>{{ nombre_periodo(p) }}</option>{% endfor %}
+  </select>
+</form>
+{% endmacro %}
+{% block contenido %}
+<div class="encabezado">
+  <div>
+    <h1>{{ usuario.NOMBRE_CARGO }}</h1>
+    <p class="subtitulo">{{ usuario.descripcion_rol() }}</p>
+  </div>
+  {{ selector_periodo(url_for('panel'), periodo, periodos) }}
+</div>
+
+<div class="resumen">
+  <div class="tarjeta"><div class="cifra">{{ completos }} / {{ estados|length }}</div><div class="rotulo">ítems completos en {{ nombre_periodo(periodo) }}</div></div>
+  <div class="tarjeta"><div class="cifra">{{ estados|length - completos }}</div><div class="rotulo">ítems pendientes</div></div>
+</div>
+
+<div class="rejilla">
+  {% for e in estados %}
+  <a class="tarjeta item" href="{{ url_for('ver_item', codigo=e.item.codigo, periodo=periodo) }}">
+    <div class="etiquetas">
+      <span class="etiqueta">{{ e.item.periodicidad.value }}</span>
+      <span class="etiqueta">{{ e.item.alcance.value }}</span>
+    </div>
+    <h3>{{ e.item.titulo }}</h3>
+    <p>{{ e.item.descripcion }}</p>
+    <div class="progreso {{ 'lleno' if e.completo }}"><span style="width: {{ e.porcentaje }}%"></span></div>
+    <div class="pie">
+      <span class="estado {{ 'ok' if e.completo else 'pendiente' }}">{{ e.texto }}</span>
+      <span>{{ e.porcentaje }} %</span>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% endblock %}
