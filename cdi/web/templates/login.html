@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block titulo %}Ingresar · Gestor Documental CDI{% endblock %}
+{% block contenido %}
+<div class="login-caja">
+  <h1>Gestor Documental CDI</h1>
+  <p class="subtitulo">Centro de Desarrollo Infantil</p>
+  <form method="post" class="tarjeta">
+    <div class="campo">
+      <label for="usuario">Usuario</label>
+      <input id="usuario" name="usuario" required autofocus>
+    </div>
+    <div class="campo">
+      <label for="clave">Clave</label>
+      <input id="clave" name="clave" type="password" required>
+    </div>
+    <button type="submit" style="width:100%">Ingresar</button>
+    <p class="demo">Usuarios de prueba: <code>nutricion</code>, <code>psicologia</code>,
+      <code>pedagogia</code>, <code>trabajosocial</code>, <code>coordinacion</code>.
+      Clave: <code>cdi2026</code></p>
+  </form>
+</div>
+{% endblock %}

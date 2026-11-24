@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block titulo %}Cumplimiento · Gestor Documental CDI{% endblock %}
+{% block contenido %}
+<div class="encabezado">
+  <div>
+    <h1>Cumplimiento documental</h1>
+    <p class="subtitulo">Avance de cada profesional en {{ nombre_periodo(periodo) }}</p>
+  </div>
+  <form class="linea" method="get">
+    <label for="periodo" style="margin:0">Periodo</label>
+    <select id="periodo" name="periodo" onchange="this.form.submit()" style="width:auto">
+      {% for p in periodos %}<option value="{{ p }}" {{ 'selected' if p == periodo }}>{{ nombre_periodo(p) }}</option>{% endfor %}
+    </select>
+  </form>
+</div>
+
+<div class="resumen">
+  <div class="tarjeta"><div class="cifra">{{ promedio }} %</div><div class="rotulo">promedio del equipo</div></div>
+  <div class="tarjeta"><div class="cifra">{{ filas|selectattr('porcentaje', 'equalto', 100)|list|length }} / {{ filas|length }}</div><div class="rotulo">profesionales al día</div></div>
+</div>
+
+<div class="tarjeta">
+  <table>
+    <thead><tr><th>Profesional</th><th style="width:220px">Avance</th><th>Pendientes</th></tr></thead>
+    <tbody>
+    {% for f in filas %}
+      <tr>
+        <td><strong>{{ f.profesional.nombres }}</strong><div class="ayuda">{{ f.profesional.NOMBRE_CARGO }}</div></td>
+        <td>
+          <div class="progreso {{ 'lleno' if f.porcentaje == 100 }}"><span style="width: {{ f.porcentaje }}%"></span></div>
+          <div class="ayuda">{{ f.porcentaje }} %</div>
+        </td>
+        <td>
+          {% for e in f.pendientes %}<div>{{ e.item.titulo }} <span class="ayuda">({{ e.texto }})</span></div>
+          {% else %}<span class="estado ok">Al día</span>{% endfor %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
