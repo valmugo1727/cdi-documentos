@@ -3,8 +3,8 @@
 Aplicación web en Python para organizar los documentos que cada profesional de un
 **Centro de Desarrollo Infantil (CDI)** debe cargar mes a mes. Cada profesional
 entra con su usuario y ve sus propios **ítems** (títulos), por ejemplo la
-nutricionista ve: *Entrega de Bienestarina*, *Actas de educación a padres de familia*,
-*Carné de vacunación*, *Datos antropométricos* y *Novedades especiales del mes*.
+Nutricionista ve: *Entrega de Bienestarina*, *Actas de educación a padres de familia*,
+*Carné de vacunación, certificado de odontología, certificado médico *, *Datos antropométricos* y *Novedades especiales del mes*.
 La coordinación ve el porcentaje de cumplimiento de todo el equipo.
 
 > Proyecto final del curso de Programación Orientada a Objetos.
