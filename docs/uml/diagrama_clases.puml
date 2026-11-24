@@ -1,0 +1,174 @@
+@startuml GestorDocumentalCDI
+' Versión PlantUML del diagrama de clases.
+' En VS Code: instalar la extensión "PlantUML" (jebbs.plantuml) y presionar Alt+D.
+title Gestor Documental CDI — Diagrama de clases
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+hide empty members
+
+package "cdi.modelos" {
+  enum Periodicidad { MENSUAL
+  UNICA }
+  enum Alcance { GENERAL
+  POR_NINO }
+
+  class ItemDocumental {
+    - __codigo: str
+    - __titulo: str
+    - __descripcion: str
+    - __periodicidad: Periodicidad
+    - __alcance: Alcance
+    - __extensiones: tuple
+    + acepta_archivo(nombre): bool
+    + es_por_nino: bool
+    + es_mensual: bool
+  }
+
+  abstract class Profesional {
+    - __id: int
+    - __identificacion: str
+    - __nombres: str
+    - __usuario: str
+    - __clave_hash: str
+    + verificar_clave(clave): bool
+    + cambiar_clave(actual, nueva)
+    + buscar_item(codigo): ItemDocumental
+    + puede_ver_reportes(): bool
+    + {abstract} items_documentales(): list
+    + {abstract} descripcion_rol(): str
+  }
+  class Nutricionista
+  class Psicologo
+  class Pedagogo
+  class TrabajadorSocial
+  class Coordinador {
+    + puede_ver_reportes(): bool
+  }
+
+  class Nino {
+    - __documento: str
+    - __nombres: str
+    - __fecha_nacimiento: date
+    - __acudiente: str
+    + edad_en_meses(hoy): int
+  }
+  class Documento {
+    - __codigo_item: str
+    - __profesional_id: int
+    - __nino_id: int
+    - __periodo: str
+    - __ruta_archivo: str
+    - __fecha_carga: datetime
+  }
+}
+
+package "cdi.patrones" {
+  class ConexionBD <<Singleton>> {
+    - {static} _instancia: ConexionBD
+    - {static} _candado: Lock
+    + __new__(ruta): ConexionBD
+    + consultar(sql, params)
+    + ejecutar(sql, params): int
+  }
+  abstract class FabricaProfesional <<Factory Method>> {
+    - {static} _registro: dict
+    # {abstract} _crear(**datos): Profesional
+    + crear(**datos): Profesional
+    + {static} para(tipo): FabricaProfesional
+  }
+  class FabricaNutricionista
+  class FabricaPsicologo
+  class FabricaPedagogo
+  class FabricaTrabajadorSocial
+  class FabricaCoordinador
+  interface Observador {
+    + {abstract} actualizar(evento)
+  }
+  class Sujeto {
+    - __observadores: list
+    + suscribir(o)
+    + desuscribir(o)
+    + notificar(evento)
+  }
+  class Evento {
+    + tipo: str
+    + usuario: str
+    + detalle: str
+    + fecha: datetime
+  }
+}
+
+package "cdi.persistencia" {
+  abstract class RepositorioBase {
+    # _bd: ConexionBD
+    # {abstract} _a_objeto(fila)
+    + obtener(id)
+    + listar(): list
+    + contar(): int
+  }
+  class RepositorioProfesionales
+  class RepositorioNinos
+  class RepositorioDocumentos {
+    + conteo_por_item(prof, periodo): dict
+  }
+  class RepositorioBitacora
+}
+
+package "cdi.servicios" {
+  class GestorDocumental {
+    + subir_documento(...): Documento
+    + eliminar_documento(prof, id)
+    + estado_items(prof, periodo): list
+    + ninos_pendientes(prof, item, periodo): list
+  }
+  class EstadoItem {
+    + cargados: int
+    + esperados: int
+    + porcentaje: int
+  }
+  class ReporteCumplimiento {
+    + generar(solicitante, periodo): list
+  }
+  class BitacoraAuditoria
+  class NotificadorPantalla
+  class ContadorEstadisticas
+}
+
+Profesional <|-- Nutricionista
+Profesional <|-- Psicologo
+Profesional <|-- Pedagogo
+Profesional <|-- TrabajadorSocial
+Profesional <|-- Coordinador
+Profesional "1" *-- "1..*" ItemDocumental
+ItemDocumental --> Periodicidad
+ItemDocumental --> Alcance
+Documento "*" --> "1" Profesional
+Documento "*" --> "0..1" Nino
+Documento "*" --> "1" ItemDocumental
+
+FabricaProfesional <|-- FabricaNutricionista
+FabricaProfesional <|-- FabricaPsicologo
+FabricaProfesional <|-- FabricaPedagogo
+FabricaProfesional <|-- FabricaTrabajadorSocial
+FabricaProfesional <|-- FabricaCoordinador
+FabricaProfesional ..> Profesional : crea
+Sujeto o--> "0..*" Observador : notifica
+Sujeto ..> Evento
+
+RepositorioBase <|-- RepositorioProfesionales
+RepositorioBase <|-- RepositorioNinos
+RepositorioBase <|-- RepositorioDocumentos
+RepositorioBase <|-- RepositorioBitacora
+RepositorioBase --> ConexionBD : usa
+RepositorioProfesionales ..> FabricaProfesional : reconstruye con
+
+Sujeto <|-- GestorDocumental
+Observador <|.. BitacoraAuditoria
+Observador <|.. NotificadorPantalla
+Observador <|.. ContadorEstadisticas
+BitacoraAuditoria --> RepositorioBitacora
+GestorDocumental *-- RepositorioDocumentos
+GestorDocumental *-- RepositorioNinos
+GestorDocumental ..> EstadoItem : produce
+ReporteCumplimiento --> GestorDocumental
+@enduml

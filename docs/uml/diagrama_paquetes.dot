@@ -1,0 +1,26 @@
+digraph Paquetes {
+  graph [rankdir=TB, fontname="Helvetica", label="Gestor Documental CDI — Arquitectura modular (capas)",
+         labelloc=t, fontsize=16, nodesep=0.6, ranksep=0.6, pad=0.3];
+  node [shape=folder, style=filled, fontname="Helvetica", fontsize=11, margin="0.25,0.12"];
+  edge [arrowhead=vee, style=dashed, fontname="Helvetica", fontsize=9, color="#555555"];
+
+  web [label="cdi.web\n(Flask: rutas, plantillas, estilos)", fillcolor="#f3e5e5"];
+  servicios [label="cdi.servicios\n(GestorDocumental, observadores, reportes)", fillcolor="#e4f3ea"];
+  persistencia [label="cdi.persistencia\n(repositorios, esquema SQLite)", fillcolor="#e8e6f5"];
+  patrones [label="cdi.patrones\n(Singleton, Factory Method, Observer)", fillcolor="#fbf0dc"];
+  modelos [label="cdi.modelos\n(Profesional, ItemDocumental, Nino, Documento)", fillcolor="#e3efed"];
+  bd [label="SQLite\n(instance/cdi.db)", shape=cylinder, fillcolor="#ffffff"];
+  archivos [label="Archivos\n(instance/uploads)", shape=cylinder, fillcolor="#ffffff"];
+
+  web -> servicios [xlabel="usa"];
+  web -> persistencia;
+  servicios -> persistencia;
+  servicios -> patrones;
+  servicios -> modelos;
+  persistencia -> patrones;
+  persistencia -> modelos;
+  patrones -> modelos;
+  persistencia -> bd [style=solid];
+  servicios -> archivos [style=solid];
+  {rank=same; bd; archivos}
+}

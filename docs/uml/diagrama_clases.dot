@@ -1,0 +1,84 @@
+digraph UML {
+  graph [rankdir=BT, splines=ortho, nodesep=0.35, ranksep=0.55, fontname="Helvetica", label="Gestor Documental CDI — Diagrama de clases", labelloc=t, fontsize=18, pad=0.3];
+  node [shape=plain, fontname="Helvetica", fontsize=10];
+  edge [fontname="Helvetica", fontsize=9, color="#555555"];
+  subgraph cluster_modelos {
+    label="cdi.modelos"; style="rounded,dashed"; color="#999999"; fontsize=12; margin=14;
+    "Profesional" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e3efed"><B><FONT POINT-SIZE="9">«abstract»</FONT><BR/><I>Profesional</I></B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- __id: int<BR ALIGN="LEFT"/>- __identificacion: str<BR ALIGN="LEFT"/>- __nombres: str<BR ALIGN="LEFT"/>- __usuario: str<BR ALIGN="LEFT"/>- __clave_hash: str<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ verificar_clave(clave): bool<BR ALIGN="LEFT"/>+ cambiar_clave(actual, nueva)<BR ALIGN="LEFT"/>+ buscar_item(codigo): ItemDocumental<BR ALIGN="LEFT"/>+ puede_ver_reportes(): bool<BR ALIGN="LEFT"/>+ items_documentales(): list {abstract}<BR ALIGN="LEFT"/>+ descripcion_rol(): str {abstract}<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "Nutricionista" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e3efed"><B>Nutricionista</B></TD></TR><TR><TD> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ items_documentales()<BR ALIGN="LEFT"/>+ descripcion_rol()<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "Psicologo" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e3efed"><B>Psicologo</B></TD></TR><TR><TD> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ items_documentales()<BR ALIGN="LEFT"/>+ descripcion_rol()<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "Pedagogo" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e3efed"><B>Pedagogo</B></TD></TR><TR><TD> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ items_documentales()<BR ALIGN="LEFT"/>+ descripcion_rol()<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "TrabajadorSocial" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e3efed"><B>TrabajadorSocial</B></TD></TR><TR><TD> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ items_documentales()<BR ALIGN="LEFT"/>+ descripcion_rol()<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "Coordinador" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e3efed"><B>Coordinador</B></TD></TR><TR><TD> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ items_documentales()<BR ALIGN="LEFT"/>+ descripcion_rol()<BR ALIGN="LEFT"/>+ puede_ver_reportes(): bool<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "ItemDocumental" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e3efed"><B>ItemDocumental</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- __codigo: str<BR ALIGN="LEFT"/>- __titulo: str<BR ALIGN="LEFT"/>- __descripcion: str<BR ALIGN="LEFT"/>- __periodicidad: Periodicidad<BR ALIGN="LEFT"/>- __alcance: Alcance<BR ALIGN="LEFT"/>- __extensiones: tuple<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ acepta_archivo(nombre): bool<BR ALIGN="LEFT"/>+ es_por_nino: bool<BR ALIGN="LEFT"/>+ es_mensual: bool<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "Periodicidad" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e3efed"><B><FONT POINT-SIZE="9">«enumeration»</FONT><BR/>Periodicidad</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">MENSUAL<BR ALIGN="LEFT"/>UNICA<BR ALIGN="LEFT"/></TD></TR><TR><TD> </TD></TR></TABLE>>];
+    "Alcance" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e3efed"><B><FONT POINT-SIZE="9">«enumeration»</FONT><BR/>Alcance</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">GENERAL<BR ALIGN="LEFT"/>POR_NINO<BR ALIGN="LEFT"/></TD></TR><TR><TD> </TD></TR></TABLE>>];
+    "Nino" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e3efed"><B>Nino</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- __id: int<BR ALIGN="LEFT"/>- __documento: str<BR ALIGN="LEFT"/>- __nombres: str<BR ALIGN="LEFT"/>- __fecha_nacimiento: date<BR ALIGN="LEFT"/>- __acudiente: str<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ edad_en_meses(hoy): int<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "Documento" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e3efed"><B>Documento</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- __id: int<BR ALIGN="LEFT"/>- __codigo_item: str<BR ALIGN="LEFT"/>- __profesional_id: int<BR ALIGN="LEFT"/>- __nino_id: int<BR ALIGN="LEFT"/>- __periodo: str<BR ALIGN="LEFT"/>- __ruta_archivo: str<BR ALIGN="LEFT"/>- __fecha_carga: datetime<BR ALIGN="LEFT"/></TD></TR><TR><TD> </TD></TR></TABLE>>];
+  }
+  subgraph cluster_patrones {
+    label="cdi.patrones"; style="rounded,dashed"; color="#999999"; fontsize=12; margin=14;
+    "ConexionBD" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#fbf0dc"><B><FONT POINT-SIZE="9">«Singleton»</FONT><BR/>ConexionBD</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- _instancia: ConexionBD {static}<BR ALIGN="LEFT"/>- _candado: Lock {static}<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ __new__(ruta): ConexionBD<BR ALIGN="LEFT"/>+ consultar(sql, params)<BR ALIGN="LEFT"/>+ ejecutar(sql, params): int<BR ALIGN="LEFT"/>+ reiniciar() {static}<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "FabricaProfesional" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#fbf0dc"><B><FONT POINT-SIZE="9">«Factory Method»</FONT><BR/><I>FabricaProfesional</I></B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- _registro: dict {static}<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"># _crear(**datos): Profesional {abstract}<BR ALIGN="LEFT"/>+ crear(**datos): Profesional<BR ALIGN="LEFT"/>+ para(tipo): FabricaProfesional {static}<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "FabricaNutricionista" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#fbf0dc"><B>FabricaNutricionista</B></TD></TR><TR><TD> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"># _crear(**datos)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "FabricaCoordinador" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#fbf0dc"><B>FabricaCoordinador</B></TD></TR><TR><TD> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"># _crear(**datos)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "Sujeto" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#fbf0dc"><B>Sujeto</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- __observadores: list<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ suscribir(o: Observador)<BR ALIGN="LEFT"/>+ desuscribir(o)<BR ALIGN="LEFT"/>+ notificar(e: Evento)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "Observador" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#fbf0dc"><B><FONT POINT-SIZE="9">«interface»</FONT><BR/><I>Observador</I></B></TD></TR><TR><TD> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ actualizar(evento) {abstract}<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "Evento" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#fbf0dc"><B>Evento</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ tipo: str<BR ALIGN="LEFT"/>+ usuario: str<BR ALIGN="LEFT"/>+ detalle: str<BR ALIGN="LEFT"/>+ fecha: datetime<BR ALIGN="LEFT"/></TD></TR><TR><TD> </TD></TR></TABLE>>];
+  }
+  subgraph cluster_persistencia {
+    label="cdi.persistencia"; style="rounded,dashed"; color="#999999"; fontsize=12; margin=14;
+    "RepositorioBase" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e8e6f5"><B><FONT POINT-SIZE="9">«abstract»</FONT><BR/><I>RepositorioBase</I></B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"># _bd: ConexionBD<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT"># _a_objeto(fila) {abstract}<BR ALIGN="LEFT"/>+ obtener(id)<BR ALIGN="LEFT"/>+ listar(): list<BR ALIGN="LEFT"/>+ contar(): int<BR ALIGN="LEFT"/>+ eliminar(id)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "RepositorioProfesionales" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e8e6f5"><B>RepositorioProfesionales</B></TD></TR><TR><TD> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ guardar(p)<BR ALIGN="LEFT"/>+ buscar_por_usuario(u)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "RepositorioNinos" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e8e6f5"><B>RepositorioNinos</B></TD></TR><TR><TD> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ guardar(n)<BR ALIGN="LEFT"/>+ buscar_por_documento(d)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "RepositorioDocumentos" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e8e6f5"><B>RepositorioDocumentos</B></TD></TR><TR><TD> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ guardar(d)<BR ALIGN="LEFT"/>+ por_item(...)<BR ALIGN="LEFT"/>+ conteo_por_item(prof, periodo): dict<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "RepositorioBitacora" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e8e6f5"><B>RepositorioBitacora</B></TD></TR><TR><TD> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ registrar(...)<BR ALIGN="LEFT"/>+ ultimos(n): list<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+  }
+  subgraph cluster_servicios {
+    label="cdi.servicios"; style="rounded,dashed"; color="#999999"; fontsize=12; margin=14;
+    "GestorDocumental" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e4f3ea"><B>GestorDocumental</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">- __carpeta: str<BR ALIGN="LEFT"/>- __docs: RepositorioDocumentos<BR ALIGN="LEFT"/>- __ninos: RepositorioNinos<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ subir_documento(prof, item, archivo, ...): Documento<BR ALIGN="LEFT"/>+ eliminar_documento(prof, id)<BR ALIGN="LEFT"/>+ estado_items(prof, periodo): list[EstadoItem]<BR ALIGN="LEFT"/>+ ninos_pendientes(prof, item, periodo): list<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "EstadoItem" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e4f3ea"><B>EstadoItem</B></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ item: ItemDocumental<BR ALIGN="LEFT"/>+ cargados: int<BR ALIGN="LEFT"/>+ esperados: int<BR ALIGN="LEFT"/></TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ porcentaje: int<BR ALIGN="LEFT"/>+ completo: bool<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "ReporteCumplimiento" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e4f3ea"><B>ReporteCumplimiento</B></TD></TR><TR><TD> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ generar(solicitante, periodo): list<BR ALIGN="LEFT"/>+ promedio_general(filas) {static}<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "BitacoraAuditoria" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e4f3ea"><B>BitacoraAuditoria</B></TD></TR><TR><TD> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ actualizar(evento)<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "NotificadorPantalla" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e4f3ea"><B>NotificadorPantalla</B></TD></TR><TR><TD> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ actualizar(evento)<BR ALIGN="LEFT"/>+ tomar_mensajes(usuario): list<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+    "ContadorEstadisticas" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#e4f3ea"><B>ContadorEstadisticas</B></TD></TR><TR><TD> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ actualizar(evento)<BR ALIGN="LEFT"/>+ total(tipo): int<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+  }
+  subgraph cluster_web {
+    label="cdi.web"; style="rounded,dashed"; color="#999999"; fontsize=12; margin=14;
+    "app (Flask)" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD BGCOLOR="#f3e5e5"><B><FONT POINT-SIZE="9">«module»</FONT><BR/>app (Flask)</B></TD></TR><TR><TD> </TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">+ crear_app(config): Flask<BR ALIGN="LEFT"/>rutas: /login, /, /item, /ninos,<BR ALIGN="LEFT"/>/reporte, /bitacora<BR ALIGN="LEFT"/></TD></TR></TABLE>>];
+  }
+  "Nutricionista" -> "Profesional" [arrowhead=empty, style=solid];
+  "Psicologo" -> "Profesional" [arrowhead=empty, style=solid];
+  "Pedagogo" -> "Profesional" [arrowhead=empty, style=solid];
+  "TrabajadorSocial" -> "Profesional" [arrowhead=empty, style=solid];
+  "Coordinador" -> "Profesional" [arrowhead=empty, style=solid];
+  "Profesional" -> "ItemDocumental" [dir=back, arrowtail=diamond, arrowhead=none, xlabel="1  ..  1..*"];
+  "ItemDocumental" -> "Periodicidad" [arrowhead=vee];
+  "ItemDocumental" -> "Alcance" [arrowhead=vee];
+  "Documento" -> "Profesional" [arrowhead=vee, xlabel="*  ..  1"];
+  "Documento" -> "Nino" [arrowhead=vee, xlabel="*  ..  0..1"];
+  "Documento" -> "ItemDocumental" [arrowhead=vee, xlabel="*  ..  1"];
+  "FabricaNutricionista" -> "FabricaProfesional" [arrowhead=empty, style=solid];
+  "FabricaCoordinador" -> "FabricaProfesional" [arrowhead=empty, style=solid];
+  "FabricaProfesional" -> "Profesional" [arrowhead=vee, style=dashed, xlabel="crea"];
+  "Sujeto" -> "Observador" [dir=back, arrowtail=odiamond, arrowhead=vee, xlabel="notifica  0..*"];
+  "Sujeto" -> "Evento" [arrowhead=vee, style=dashed];
+  "RepositorioProfesionales" -> "RepositorioBase" [arrowhead=empty, style=solid];
+  "RepositorioNinos" -> "RepositorioBase" [arrowhead=empty, style=solid];
+  "RepositorioDocumentos" -> "RepositorioBase" [arrowhead=empty, style=solid];
+  "RepositorioBitacora" -> "RepositorioBase" [arrowhead=empty, style=solid];
+  "RepositorioBase" -> "ConexionBD" [arrowhead=vee, xlabel="usa"];
+  "RepositorioProfesionales" -> "FabricaProfesional" [arrowhead=vee, style=dashed, xlabel="reconstruye con"];
+  "GestorDocumental" -> "Sujeto" [arrowhead=empty, style=solid];
+  "BitacoraAuditoria" -> "Observador" [arrowhead=empty, style=dashed];
+  "NotificadorPantalla" -> "Observador" [arrowhead=empty, style=dashed];
+  "ContadorEstadisticas" -> "Observador" [arrowhead=empty, style=dashed];
+  "BitacoraAuditoria" -> "RepositorioBitacora" [arrowhead=vee];
+  "GestorDocumental" -> "RepositorioDocumentos" [dir=back, arrowtail=diamond, arrowhead=none];
+  "GestorDocumental" -> "RepositorioNinos" [dir=back, arrowtail=diamond, arrowhead=none];
+  "GestorDocumental" -> "EstadoItem" [arrowhead=vee, style=dashed, xlabel="produce"];
+  "ReporteCumplimiento" -> "GestorDocumental" [arrowhead=vee];
+  "app (Flask)" -> "GestorDocumental" [arrowhead=vee];
+  "app (Flask)" -> "ReporteCumplimiento" [arrowhead=vee];
+  "app (Flask)" -> "NotificadorPantalla" [arrowhead=vee];
+}
